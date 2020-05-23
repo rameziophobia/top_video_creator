@@ -9,7 +9,7 @@ HREF_CLASS = "basic_stat product_title"
 REQUEST_HEADER = {'User-Agent': 'Mozilla/5.0'}
 
 
-def main():
+def scrap():
     soup = get_soup(test_url)
     games_info = []
     game_divs = soup.find_all('div', class_=HREF_CLASS)
@@ -36,7 +36,8 @@ def get_game_info(div):
     if href_parent:
         game['url'] = BASE_URL + href_parent['href']
         game['name'] = href_parent.text.strip()
-        game['filename'] = "".join(x for x in game['name'] if (x.isalnum() or x in [" ", "'"])) + ".mp4"
+        game['filename'] = "".join(
+            x for x in game['name'] if (x.isalnum() or x in [" ", "'"]))
     rating1_div = div.next_sibling.next_sibling
     game['rating'] = rating1_div.find('div').text
     rating2_div = rating1_div.next_sibling.next_sibling
@@ -53,7 +54,8 @@ def add_game_video(game):
     else:
         game['video_found'] = False
 
-    playlist_pattern = re.compile(r'MetaC\.Video\.addToPlaylist.', re.MULTILINE | re.DOTALL)
+    playlist_pattern = re.compile(
+        r'MetaC\.Video\.addToPlaylist.', re.MULTILINE | re.DOTALL)
     playlist_div = soup.find("script", text=playlist_pattern)
     if playlist_div:
         vid_url_pattern = re.compile(r'https.*\.mp4')
@@ -77,4 +79,4 @@ def write_json(my_dict):
 
 
 if __name__ == "__main__":
-    main()
+    scrap()

@@ -1,5 +1,8 @@
 import requests
 import json
+from config import FIRST_VIDEO, LAST_VIDEO
+from video_downloader_yt import downloadFile
+
 test_url = "https://static-gamespotvideo.cbsistatic.com/vr/2016/12/03/Trailer_Persona5_ThePhantomThieves_20161203_4000.mp4"
 
 THRESHOLD = 300
@@ -8,7 +11,7 @@ THRESHOLD = 300
 def download_video(name, url, playlist_urls):
     size_header = requests.get(url, stream=True).headers['Content-length']
     size = int(size_header) // 1024 // 1024
-    print(size)
+    print(f"SIZE OF VIDEO ID {size} MB")
 
     for u in playlist_urls:
         if size and size < THRESHOLD and playlist_urls:
@@ -26,7 +29,7 @@ def download_video(name, url, playlist_urls):
 
 
 def write_file(name, response):
-    with open(name, 'wb') as f:
+    with open(name + ".mp4", 'wb') as f:
         print("Downloading.....")
         for chunk in response.iter_content(chunk_size=255):
             if chunk:  # filter out keep-alive new chunks
@@ -34,11 +37,15 @@ def write_file(name, response):
         print("Done")
 
 
-with open("output.json") as json_file:
-    data = json.load(json_file)
-    for game in data:
-        if game['video_found'] or game['playlist_found']:
-            print(f"downloading {game['name']} {game['video_url']}")
-            playlist_vids = game.get('playlist_videos', [])
-            download_video(game['filename'], game['video_url'], playlist_vids)
-            print(f"finished {game['name']}")
+def download_videos():
+    with open("output.json") as json_file:
+        data = json.load(json_file)
+        for game in data[FIRST_VIDEO:LAST_VIDEO]:
+            if game['video_found'] or game["playlist_found"]:
+                print(f"downloading {game['name']} {game['video_url']}")
+                playlist_vids = game.get('playlist_videos', [])
+                download_video(game['filename'],
+                               game['video_url'], playlist_vids)
+                print(f"finished {game['name']}")
+            else:
+                downloadFile(game['filename'])

@@ -2,3 +2,4 @@ requests
 setuptools
 moviepy
 beautifulsoup4
+pytube3

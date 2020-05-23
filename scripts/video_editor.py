@@ -1,14 +1,18 @@
 from moviepy.editor import *
 import json
+from config import FIRST_VIDEO, LAST_VIDEO
+
 clips = []
 names = []
+LIST_SIZE = LAST_VIDEO - FIRST_VIDEO + 1
 
 
 def addText(clip, name):
-    txt_clip = (TextClip(name, fontsize=80, color='white')
+    txt_clip = (TextClip(f"{LIST_SIZE} : {name}", fontsize=70, color='white')
                 .set_position(('left', 'bottom'))
                 .set_duration(8))
     clip = CompositeVideoClip([clip, txt_clip])
+    LIST_SIZE -= 1
     return clip
 
 
@@ -19,11 +23,9 @@ def addVideos(clips):
     for clip in clips:
         clip = clip.resize((1920, 1080))
         clips[i] = addText(clip, names[i])
-
         i = i+1
-    final = concatenate_videoclips([clip for clip in clips])
 
-    # final = concatenate_videoclips([clips[0], clips[1]])
+    final = concatenate_videoclips([clip for clip in clips])
 
     final.write_videofile("../videos/final.mp4", codec="libx264")
 
@@ -32,7 +34,7 @@ def createVideo():
     with open("output.json") as json_file:
         data = json.load(json_file)
         i = 0
-        for game in data[5:7]:
+        for game in data[FIRST_VIDEO:LAST_VIDEO]:
             clips.append(VideoFileClip(f"../videos/{game['filename']}"))
             clips[i] = clips[i].subclip(round(clips[i].duration * 0.35),
                                         round(clips[i].duration * 0.35)+10)
@@ -43,15 +45,4 @@ def createVideo():
 
 
 if __name__ == "__main__":
-
-    with open("output.json") as json_file:
-        data = json.load(json_file)
-        i = 0
-        for game in data[9:12]:
-            clips.append(VideoFileClip(f"../videos/{game['filename']}"))
-            clips[i] = clips[i].subclip(round(clips[i].duration * 0.35),
-                                        round(clips[i].duration * 0.35)+10)
-            i = i+1
-            names.append(game['name'])
-
-    addVideos(clips)
+    createVideo()
