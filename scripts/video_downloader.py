@@ -24,4 +24,3 @@ with open("output.json") as json_file:
             print(f"downloading {game['name']} {game['video_url']}")
             downloadfile(game['filename'], game['video_url'])
             print(f"finished {game['name']}")
-
