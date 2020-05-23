@@ -21,11 +21,14 @@ def download_video(name, url, playlist_urls):
         print(size)
         url = u
 
-    if size or size <= THRESHOLD:
+    if size and size <= THRESHOLD:
         response = requests.get(url)
         name = "../videos/" + name
         print(name)
         write_file(name, response)
+
+    else:
+        downloadFile(name)
 
 
 def write_file(name, response):
