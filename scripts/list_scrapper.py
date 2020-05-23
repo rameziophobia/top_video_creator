@@ -73,9 +73,9 @@ def get_soup(store_site):
     return soup
 
 
-def write_json(my_dict):
+def write_json(games_list):
     with open('output.json', 'w+') as handle:
-        json.dump(my_dict, handle, indent=4)
+        json.dump(list(reversed(games_list)), handle, indent=4)
 
 
 if __name__ == "__main__":
