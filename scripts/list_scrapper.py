@@ -54,11 +54,14 @@ def add_game_video(game):
         game['video_found'] = False
 
     playlist_pattern = re.compile(r'MetaC\.Video\.addToPlaylist.', re.MULTILINE | re.DOTALL)
-    playlist_string = soup.find("script", text=playlist_pattern).string
-
-    vid_url_pattern = re.compile(r'https.*\.mp4')
-    playlist_videos = re.findall(vid_url_pattern, playlist_string)
-    game['playlist_videos'] = playlist_videos
+    playlist_div = soup.find("script", text=playlist_pattern)
+    if playlist_div:
+        vid_url_pattern = re.compile(r'https.*\.mp4')
+        playlist_videos = re.findall(vid_url_pattern, playlist_div.string)
+        game['playlist_videos'] = playlist_videos
+        game['playlist_found'] = True
+    else:
+        game['playlist_found'] = False
     print(f"finished {game['name']}  -video fetch-")
 
 
