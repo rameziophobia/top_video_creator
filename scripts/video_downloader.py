@@ -1,6 +1,6 @@
 import requests
 
-test_url = "https://static-gamespotvideo.cbsistatic.com/vr/2016/12/03/Trailer_Persona5_ThePhantomThieves_20161203_4000.mp4"
+test_url = "https://static-gamespotvideo.cbsistatic.com/vr/2014/08/12/Trailer_Bloodborne_GAMEPLAYGC_20140812_4000.mp4"
 
 
 def downloadfile(name, url):
@@ -16,5 +16,5 @@ def downloadfile(name, url):
     f.close()
 
 
-downloadfile("Persona5", test_url)
+downloadfile("BloodBorne", test_url)
 
