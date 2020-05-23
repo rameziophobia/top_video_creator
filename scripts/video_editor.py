@@ -8,6 +8,7 @@ LIST_SIZE = LAST_VIDEO - FIRST_VIDEO + 1
 
 
 def addText(clip, name):
+    global LIST_SIZE
     txt_clip = (TextClip(f"{LIST_SIZE} : {name}", fontsize=70, color='white')
                 .set_position(('left', 'bottom'))
                 .set_duration(8))
@@ -35,7 +36,7 @@ def createVideo():
         data = json.load(json_file)
         i = 0
         for game in data[FIRST_VIDEO:LAST_VIDEO]:
-            clips.append(VideoFileClip(f"../videos/{game['filename']}"))
+            clips.append(VideoFileClip(f"../videos/{game['filename']}.mp4"))
             clips[i] = clips[i].subclip(round(clips[i].duration * 0.35),
                                         round(clips[i].duration * 0.35)+10)
             i = i+1
@@ -45,4 +46,5 @@ def createVideo():
 
 
 if __name__ == "__main__":
+    LIST_SIZE = LAST_VIDEO - FIRST_VIDEO + 1
     createVideo()
