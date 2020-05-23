@@ -1,15 +1,7 @@
 from bs4 import BeautifulSoup
 from requests import get
 import json
-
-# from moviepy.editor import *
-#
-# video = VideoFileClip("../videos/Persona5.mp4").subclip(50,60)
-# txt_clip = (TextClip("My Holidays 2013", fontsize=70, color='white')
-#             .set_position('center')
-#             .set_duration(10))
-# result = CompositeVideoClip([video, txt_clip]) # Overlay text on video
-# result.write_videofile("../videos/myHolidays_edited.mp4",fps=25) # Many options...
+import re
 
 test_url = "https://www.metacritic.com/browse/games/score/metascore/all/ps4/filtered"
 BASE_URL = "https://www.metacritic.com"
@@ -25,7 +17,9 @@ def main():
 
     position = 0
     for div in game_divs:
-        game = get_game_info(div, position)
+        game = get_game_info(div)
+        game['position'] = position
+        position += 1
         games_info.append(game)
         print(f"finished {game['name']} -rating fetch-")
 
@@ -36,14 +30,13 @@ def main():
     write_json(games_info)
 
 
-def get_game_info(div, position):
+def get_game_info(div):
     game = {}
     href_parent = div.find('a')
     if href_parent:
         game['url'] = BASE_URL + href_parent['href']
         game['name'] = href_parent.text.strip()
-        game['position'] = position
-        position += 1
+        game['filename'] = "".join(x for x in game['name'] if (x.isalnum() or x in [" ", "'"])) + ".mp4"
     rating1_div = div.next_sibling.next_sibling
     game['rating'] = rating1_div.find('div').text
     rating2_div = rating1_div.next_sibling.next_sibling
@@ -59,6 +52,13 @@ def add_game_video(game):
         game['video_found'] = True
     else:
         game['video_found'] = False
+
+    playlist_pattern = re.compile(r'MetaC\.Video\.addToPlaylist.', re.MULTILINE | re.DOTALL)
+    playlist_string = soup.find("script", text=playlist_pattern).string
+
+    vid_url_pattern = re.compile(r'https.*\.mp4')
+    playlist_videos = re.findall(vid_url_pattern, playlist_string)
+    game['playlist_videos'] = playlist_videos
     print(f"finished {game['name']}  -video fetch-")
 
 

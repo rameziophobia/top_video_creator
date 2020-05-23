@@ -4,8 +4,7 @@ test_url = "https://static-gamespotvideo.cbsistatic.com/vr/2016/12/03/Trailer_Pe
 
 
 def downloadfile(name, url):
-    name = "".join(x for x in name if (x.isalnum() or x in [" "]))
-    name = "../videos/" + name + ".mp4"
+    name = "../videos/" + name
     print(name)
     r = requests.get(url)
     print("****Connected****")
@@ -23,6 +22,6 @@ with open("output.json") as json_file:
     for game in data[5: 8]:
         if game['video_found']:
             print(f"downloading {game['name']} {game['video_url']}")
-            downloadfile(game['name'], game['video_url'])
+            downloadfile(game['filename'], game['video_url'])
             print(f"finished {game['name']}")
 
