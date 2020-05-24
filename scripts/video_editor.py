@@ -27,7 +27,7 @@ def addVideos(clips):
 
     final = concatenate_videoclips([clip for clip in clips])
 
-    final.write_videofile("../videos/final.mp4", codec="libx264")
+    final.write_videofile("../videos/final.mp4", codec="libx264", threads=8, fps=30)
 
 
 def createVideo():
