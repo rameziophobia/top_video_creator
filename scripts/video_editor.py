@@ -11,7 +11,7 @@ def addText(clip, name):
     global LIST_SIZE
     txt_clip = (TextClip(f"{LIST_SIZE} : {name}", fontsize=70, color='white')
                 .set_position(('left', 'bottom'))
-                .set_duration(8))
+                .set_duration(int(SINGLE_VIDEO_LENGTH.seconds) - 2))
     clip = CompositeVideoClip([clip, txt_clip])
     LIST_SIZE -= 1
     return clip
@@ -27,7 +27,8 @@ def addVideos(clips):
 
     final = concatenate_videoclips([clip for clip in clips])
 
-    final.write_videofile("../videos/final.mp4", codec="libx264", threads=8, fps=30)
+    final.write_videofile("../videos/final.mp4",
+                          codec="libx264", threads=8, fps=30)
 
 
 def createVideo():
@@ -37,7 +38,7 @@ def createVideo():
         for game in data[FIRST_VIDEO:LAST_VIDEO]:
             clip = VideoFileClip(f"../videos/{game['filename']}.mp4")
             clip = clip.subclip(round(clip.duration * 0.35),
-                                round(clip.duration * 0.35) + 10)
+                                round(clip.duration * 0.35) + int(SINGLE_VIDEO_LENGTH.seconds))
             clips.append(clip)
             names.append(game['name'])
 

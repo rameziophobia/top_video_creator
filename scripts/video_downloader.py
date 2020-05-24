@@ -1,7 +1,7 @@
 import requests
 import json
 import os
-from config import FIRST_VIDEO, LAST_VIDEO
+from config import *
 from video_downloader_yt import downloadFile
 
 test_url = "https://static-gamespotvideo.cbsistatic.com/vr/2016/12/03/Trailer_Persona5_ThePhantomThieves_20161203_4000.mp4"
