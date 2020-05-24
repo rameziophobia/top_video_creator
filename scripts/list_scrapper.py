@@ -37,7 +37,7 @@ def get_game_info(div):
         game['url'] = BASE_URL + href_parent['href']
         game['name'] = href_parent.text.strip()
         game['filename'] = "".join(
-            x for x in game['name'] if (x.isalnum() or x in [" ", "'"]))
+            x for x in game['name'] if (x.isalnum() or x in [" "]))
     rating1_div = div.next_sibling.next_sibling
     game['rating'] = rating1_div.find('div').text
     rating2_div = rating1_div.next_sibling.next_sibling
@@ -50,6 +50,7 @@ def add_game_video(game):
     video_wrapper_div = soup.find('div', id='videoContainer_wrapper')
     if video_wrapper_div:
         game['video_url'] = video_wrapper_div.attrs['data-mcvideourl']
+        game['video_url'].replace(r'/gsc', '')
         game['video_found'] = True
     else:
         game['video_found'] = False

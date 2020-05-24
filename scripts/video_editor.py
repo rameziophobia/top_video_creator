@@ -4,7 +4,7 @@ from config import FIRST_VIDEO, LAST_VIDEO
 
 clips = []
 names = []
-LIST_SIZE = LAST_VIDEO - FIRST_VIDEO + 1
+LIST_SIZE = LAST_VIDEO - FIRST_VIDEO
 
 
 def addText(clip, name):
@@ -18,13 +18,12 @@ def addText(clip, name):
 
 
 def addVideos(clips):
-
     i = 0
 
     for clip in clips:
         clip = clip.resize((1920, 1080))
         clips[i] = addText(clip, names[i])
-        i = i+1
+        i = i + 1
 
     final = concatenate_videoclips([clip for clip in clips])
 
@@ -34,17 +33,17 @@ def addVideos(clips):
 def createVideo():
     with open("output.json") as json_file:
         data = json.load(json_file)
-        i = 0
+
         for game in data[FIRST_VIDEO:LAST_VIDEO]:
-            clips.append(VideoFileClip(f"../videos/{game['filename']}.mp4"))
-            clips[i] = clips[i].subclip(round(clips[i].duration * 0.35),
-                                        round(clips[i].duration * 0.35)+10)
-            i = i+1
+            clip = VideoFileClip(f"../videos/{game['filename']}.mp4")
+            clip = clip.subclip(round(clip.duration * 0.35),
+                                round(clip.duration * 0.35) + 10)
+            clips.append(clip)
             names.append(game['name'])
 
     addVideos(clips)
 
 
 if __name__ == "__main__":
-    LIST_SIZE = LAST_VIDEO - FIRST_VIDEO + 1
+    LIST_SIZE = LAST_VIDEO - FIRST_VIDEO
     createVideo()
