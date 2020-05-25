@@ -2,7 +2,7 @@ import requests
 import json
 import os
 from config import *
-from video_downloader_yt import downloadFile
+from video_downloader_yt import safeDownloadFile
 
 test_url = "https://static-gamespotvideo.cbsistatic.com/vr/2016/12/03/Trailer_Persona5_ThePhantomThieves_20161203_4000.mp4"
 
@@ -29,7 +29,7 @@ def download_video(name, url, playlist_urls):
         write_file(name, response)
 
     else:
-        downloadFile(name)
+        safeDownloadFile(name)
 
 
 def write_file(name, response):
@@ -45,7 +45,8 @@ def download_videos():
     with open("output.json") as json_file:
         data = json.load(json_file)
         for game in data[FIRST_VIDEO:LAST_VIDEO]:
-            if os.path.exists(r'../videos/' + game['filename'] + '.mp4') exists():
+            if os.path.exists(r'../videos/' + game['filename'] + '.mp4'):
+                print(f"{game['filename']} already exists")
                 continue
             if game['video_found'] or game["playlist_found"]:
                 print(f"downloading {game['name']} {game['video_url']}")
@@ -54,4 +55,5 @@ def download_videos():
                                game['video_url'], playlist_vids)
                 print(f"finished {game['name']}")
             else:
-                downloadFile(game['filename'])
+                safeDownloadFile(game['filename'])
+download_videos()

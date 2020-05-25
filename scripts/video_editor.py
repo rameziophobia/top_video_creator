@@ -1,6 +1,6 @@
 from moviepy.editor import *
 import json
-from config import FIRST_VIDEO, LAST_VIDEO
+from config import FIRST_VIDEO, LAST_VIDEO, SINGLE_VIDEO_LENGTH
 
 clips = []
 names = []
