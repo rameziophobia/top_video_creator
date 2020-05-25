@@ -42,6 +42,8 @@ def get_game_info(div):
     game['rating'] = rating1_div.find('div').text
     rating2_div = rating1_div.next_sibling.next_sibling
     game['user_rating'] = rating2_div.text.strip().split()[1]
+    rating2_div = rating1_div.next_sibling.next_sibling
+    game['release_date'] = rating2_div.text.strip().split()[-2:]
     return game
 
 
