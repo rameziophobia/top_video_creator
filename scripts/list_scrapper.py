@@ -3,7 +3,7 @@ from requests import get
 import json
 import re
 
-test_url = "https://www.metacritic.com/browse/games/score/metascore/all/ps4/filtered"
+test_url = "https://www.metacritic.com/browse/games/release-date/coming-soon/switch/date"
 BASE_URL = "https://www.metacritic.com"
 HREF_CLASS = "basic_stat product_title"
 REQUEST_HEADER = {'User-Agent': 'Mozilla/5.0'}
@@ -78,7 +78,9 @@ def get_soup(store_site):
 
 def write_json(games_list):
     with open('output.json', 'w+') as handle:
-        json.dump(list(reversed(games_list)), handle, indent=4)
+        # reverse list for countdown
+        # games_list = list(reversed(games_list))
+        json.dump(games_list, handle, indent=4)
 
 
 if __name__ == "__main__":

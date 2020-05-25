@@ -45,15 +45,20 @@ def download_videos():
     with open("output.json") as json_file:
         data = json.load(json_file)
         for game in data[FIRST_VIDEO:LAST_VIDEO]:
-            if os.path.exists(r'../videos/' + game['filename'] + '.mp4'):
-                print(f"{game['filename']} already exists")
-                continue
-            if game['video_found'] or game["playlist_found"]:
-                print(f"downloading {game['name']} {game['video_url']}")
-                playlist_vids = game.get('playlist_videos', [])
-                download_video(game['filename'],
-                               game['video_url'], playlist_vids)
-                print(f"finished {game['name']}")
-            else:
-                safeDownloadFile(game['filename'])
+            if game['release_date'][0] == MONTH[TARGET_MONTH] or (not FILTER_BY_MONTH):
+                if os.path.exists(r'../videos/' + game['filename'] + '.mp4'):
+                    print(f"{game['filename']} already exists")
+                    continue
+                if game['video_found'] or game["playlist_found"]:
+                    print(f"downloading {game['name']} {game['video_url']}")
+                    playlist_vids = game.get('playlist_videos', [])
+                    download_video(game['filename'],
+                                   game['video_url'], playlist_vids)
+                    print(f"finished {game['name']}")
+                else:
+                    print(f"downloading {game['name']} {game['video_url']}")
+                    safeDownloadFile(game['filename'])
+                    print(f"finished {game['name']}")
+
+
 download_videos()
