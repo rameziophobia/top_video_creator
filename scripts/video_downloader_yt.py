@@ -1,4 +1,4 @@
-from pytube import YouTube, exceptions.RegexMatchError
+from pytube import YouTube
 from pytube.exceptions import RegexMatchError
 from bs4 import BeautifulSoup
 from list_scrapper import get_soup
