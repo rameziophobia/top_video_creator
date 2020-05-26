@@ -56,7 +56,7 @@ def download_videos():
                                    game['video_url'], playlist_vids)
                     print(f"finished {game['name']}")
                 else:
-                    print(f"downloading {game['name']} {game['video_url']}")
+                    print(f"downloading {game['name']}")
                     safeDownloadFile(game['filename'])
                     print(f"finished {game['name']}")
 

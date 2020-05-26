@@ -5,5 +5,6 @@ from list_scrapper import *
 
 
 if __name__ == "__main__":
+    scrap()
     download_videos()
     createVideo()
