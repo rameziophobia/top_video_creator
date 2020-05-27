@@ -12,7 +12,7 @@ def addText(clip, name, date):
     global LIST_SIZE
     txt_clip = (TextClip(f"{name}: {date}", fontsize=70, color='white', font="Amiri-bold")
                 .set_position(('left', 'bottom'))
-                .set_duration(int(SINGLE_VIDEO_LENGTH.seconds) - 2))
+                .set_duration(int(clip.duration) - 2))
     clip = CompositeVideoClip([clip, txt_clip])
     LIST_SIZE -= 1
     return clip
@@ -33,7 +33,7 @@ def addVideos(clips):
 
 
 def createVideo():
-    with open("output.json") as json_file:
+    with open("output.json", "r+") as json_file:
         data = json.load(json_file)
 
         for game in data[FIRST_VIDEO:LAST_VIDEO]:
@@ -41,11 +41,16 @@ def createVideo():
                 print(game['filename'])
                 clip = VideoFileClip(f"../videos/{game['filename']}.mp4")
                 clip = clip.subclip(round(clip.duration * CUT_PERCENT),
-                                    round(clip.duration * CUT_PERCENT) + int(SINGLE_VIDEO_LENGTH.seconds))
+                                    min(round(clip.duration * CUT_PERCENT) + int(SINGLE_VIDEO_LENGTH.seconds), clip.duration))
+                game['clip_duration'] = clip.duration
                 clips.append(clip)
                 names.append(game['name'])
                 date.append(
                     f"{game['release_date'][1]} {game['release_date'][0]}")
+                    
+        json_file.seek(0)
+        json_file.truncate()
+        json.dump(data, json_file, indent=4)
     print(len(clips))
     addVideos(clips)
   

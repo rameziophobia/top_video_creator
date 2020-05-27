@@ -12,7 +12,7 @@ def write_text_file():
         for game in data[FIRST_VIDEO:LAST_VIDEO]:
             if game['release_date'][0] == MONTH[TARGET_MONTH] or (not FILTER_BY_MONTH):
                 text += f"{game['release_date'][1]} {game['release_date'][0]} -- {game['name']}: {START_TIME}\n"
-                START_TIME += SINGLE_VIDEO_LENGTH
+                START_TIME += timedelta(seconds=int(game['clip_duration']))
         text_file.write(text)
         text_file.close()
 
